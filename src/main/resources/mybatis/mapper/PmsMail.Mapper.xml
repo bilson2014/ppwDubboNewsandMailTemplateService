@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.paipianwang.pat.facade.information.service.dao.impl.PmsMailDaoImpl">
+
+	<!-- 邮件表 -->
+	<sql id="pms_mail"> MAIL </sql>
+	<select id="getTemplateByType" resultType="PmsMail">
+		SELECT 
+			m.ID,m.SUBJECT,m.CONTENT,
+			m.MAIL_TYPE mailType,
+			m.CREATE_TIME createTime,
+			m.UPDATE_TIME updateTime
+		FROM 
+		<include refid="pms_mail" />  m
+		<where>
+			m.MAIL_TYPE = #{mailType}
+		</where>
+	</select>
+
+</mapper>
