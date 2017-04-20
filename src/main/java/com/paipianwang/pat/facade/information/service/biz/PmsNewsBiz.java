@@ -2,10 +2,15 @@ package com.paipianwang.pat.facade.information.service.biz;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.paipianwang.pat.common.entity.DataGrid;
+import com.paipianwang.pat.common.entity.PageParam;
+import com.paipianwang.pat.common.util.ValidateUtil;
 import com.paipianwang.pat.facade.information.entity.PmsNews;
 import com.paipianwang.pat.facade.information.service.dao.PmsNewsDao;
 
@@ -25,5 +30,30 @@ public class PmsNewsBiz {
 		return list;
 	}
 
-	
+	public DataGrid<PmsNews> listWithPagination(PageParam pageParam, Map<String, Object> paramMap) {
+		return pmsNewsDao.listWithPagination(pageParam, paramMap);
+	}
+
+	@Transactional
+	public long insert(PmsNews pmsNews) {
+		return pmsNewsDao.insert(pmsNews);
+	}
+
+	@Transactional
+	public long update(PmsNews pmsNews) {
+		return pmsNewsDao.update(pmsNews);
+	}
+
+	@Transactional
+	public long deleteByIds(long[] ids) {
+		if(ValidateUtil.isValid(ids)) {
+			return pmsNewsDao.deleteByIds(ids);
+		}
+		return 0;
+	}
+
+	public PmsNews findNewsById(long newsId) {
+		return pmsNewsDao.getById(newsId);
+	}
+
 }

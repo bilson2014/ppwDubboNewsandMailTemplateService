@@ -13,7 +13,4 @@ public interface PmsNewsDao extends BaseDao<PmsNews>{
 
 	public List<PmsNews> RecommendNews();
 
-
-	
-	
 }
