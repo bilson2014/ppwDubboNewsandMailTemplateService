@@ -1,7 +1,5 @@
 package com.paipianwang.pat.facade.information.service.dao;
 
-import java.util.List;
-
 import com.paipianwang.pat.common.core.dao.BaseDao;
 import com.paipianwang.pat.facade.information.entity.PmsNews;
 
@@ -11,6 +9,8 @@ import com.paipianwang.pat.facade.information.entity.PmsNews;
  */
 public interface PmsNewsDao extends BaseDao<PmsNews>{
 
-	public List<PmsNews> RecommendNews();
+	public PmsNews findNextNew(final String tags, final int newId, final Integer recommend);
+
+	public PmsNews findPreNew(final String tags, final int newId, final Integer recommend);
 
 }

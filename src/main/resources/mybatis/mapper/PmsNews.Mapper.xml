@@ -3,73 +3,44 @@
 <mapper
 	namespace="com.paipianwang.pat.facade.information.service.dao.impl.PmsNewsDaoImpl">
 
+	<!-- 查询字段 -->
+	<sql id="news_field">
+		ID AS id,
+		TITLE AS title,
+		DISCRIPTION AS discription,
+		CONTENT AS content,
+		DATE_FORMAT(CREATE_TIME, '%Y-%m-%d') createTime,
+		DATE_FORMAT(UPDATE_TIME, '%Y-%m-%d') updateTime,
+		IFNULL(SORT_INDEX, 0) AS sortIndex,
+		STATUS AS status,
+		TAGS AS tags,
+		PICLDURL AS picLDUrl,
+		RECOMMEND AS recommend,
+		VISIBLE AS visible
+	</sql>
+	
 	<!-- 新闻表 -->
 	<sql id="pms_news"> NEWS </sql>
 	
-	<select id="getById" resultType="PmsNews">
-		SELECT ID,TITLE,DISCRIPTION
-			,CONTENT,CREATE_TIME createTime
-			,UPDATE_TIME updateTime,IFNULL(SORT_INDEX,0) sortIndex
-			,`status` ,
-			TAGS AS tags,
-			PICLDURL AS picLDUrl,
-			RECOMMEND AS recommend,
-			VISIBLE AS visible
-			FROM 
-			<include refid="pms_news" />
-			<where>
-				ID= ${id}
-			</where> 
-	</select>
+	<sql id="sql_condition">
+		<if test="tags != null and tags!= ''">
+			TAGS LIKE CONCAT(CONCAT('%',#{tags}),'%')
+		</if>
+		
+		<if test="recommend != null">
+			AND RECOMMEND > 0
+		</if>
+		
+		<if test="status != null">
+			AND STATUS = #{status}
+		</if>
+		
+		<if test="visible != null">
+			AND VISIBLE = ${visible}
+		</if>
+	</sql>
 	
-	<select id="RecommendNews" resultType="PmsNews">
-		SELECT id ,title,discription 
-			FROM 
-			<include refid="pms_news" />
-			<where>
-				status = 1
-			</where>
-		 ORDER BY create_time DESC LIMIT 0,6
-	</select>
-	
-	<select id="listPage" resultType="PmsNews">
-		SELECT  news.ID AS id,
-				news.TITLE AS id,
-				news.DISCRIPTION AS discription,
-				news.CONTENT AS content,
-				news.CREATE_TIME AS createTime,
-				news.UPDATE_TIME AS updateTime,
-				news.SORT_INDEX AS sortIndex,
-				news.`STATUS` AS status,
-				news.TAGS AS tags,
-				news.PICLDURL AS picLDUrl,
-				news.RECOMMEND AS recommend,
-				news.VISIBLE AS visible
-		FROM 
-		<include refid="pms_news" /> news 
-		<where>
-			<if test="category != null">
-				AND CATEGORY = ${category}
-			</if>
-		</where>
-		<![CDATA[
-			ORDER BY create_time desc
-			LIMIT ${begin} , ${limit}
-		]]>
-	</select>
-	
-	<select id="listPageCount" resultType="java.lang.Long">
-		SELECT COUNT(1)
-		FROM 
-		<include refid="pms_news" /> 
-		<where>
-			<if test="category != null">
-				AND CATEGORY = ${category}
-			</if>
-		</where>
-	</select>
-	
-	<insert id="save" useGeneratedKeys="true" keyProperty="id"
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
 		parameterType="PmsNews">
 			INSERT INTO 
 			<include refid="pms_news" /> 
@@ -77,10 +48,8 @@
 			    TITLE,
 				DISCRIPTION,
 				CONTENT,
-				CREATE_TIME,
-				UPDATE_TIME,
 				SORT_INDEX,
-				`STATUS`,
+				STATUS,
 				TAGS,
 				PICLDURL,
 				RECOMMEND,
@@ -91,8 +60,6 @@
 				#{title},
 				#{discription},
 				#{content},
-				CURRENT_TIMESTAMP,
-				CURRENT_TIMESTAMP,
 				${sortIndex},
 				${status},
 				#{tags},
@@ -119,7 +86,7 @@
 			</if> 
 		</set>
 		<where>
-			ID = ${id}
+			ID = #{id}
 		</where>
 	</update>
 	
@@ -129,8 +96,72 @@
 		<where>
 			ID IN 
 			<foreach collection="ids" open="(" close=")" item="newsId" separator=",">
-				${newsId}
+				#{newsId}
 			</foreach>
 		</where>
 	</delete>
+	
+	<select id="getById" resultType="PmsNews">
+		SELECT 	
+			<include refid="news_field" />
+		FROM 
+			<include refid="pms_news" />
+		<where>
+			ID= #{id}
+		</where> 
+	</select>
+	
+	<select id="listPage" resultType="PmsNews">
+		SELECT  
+			<include refid="news_field" />
+		FROM 
+			<include refid="pms_news" /> 
+		<where>
+			<include refid="sql_condition" /> 
+		</where>
+		<![CDATA[
+			ORDER BY create_time desc
+			LIMIT ${begin} , ${limit}
+		]]>
+	</select>
+	
+	<select id="listPageCount" resultType="java.lang.Long">
+		SELECT 
+			COUNT(1)
+		FROM 
+		<include refid="pms_news" /> 
+		<where>
+			<include refid="sql_condition" /> 
+		</where>
+	</select>
+	
+	<select id="findNextNew" resultType="PmsNews">
+		SELECT  
+			<include refid="news_field" />
+		FROM 
+			<include refid="pms_news" /> 
+		<where>
+			<include refid="sql_condition" /> 
+			<![CDATA[
+				AND ID < #{id}
+			]]>
+		</where>
+		ORDER BY ID DESC 
+		LIMIT 1
+	</select>
+	
+	<select id="findPreNew" resultType="PmsNews">
+		SELECT  
+			<include refid="news_field" />
+		FROM 
+			<include refid="pms_news" /> 
+		<where>
+			<include refid="sql_condition" /> 
+			<![CDATA[
+				AND ID > #{id}
+			]]>
+		</where>
+		ORDER BY ID ASC 
+		LIMIT 1
+	</select>
 </mapper>

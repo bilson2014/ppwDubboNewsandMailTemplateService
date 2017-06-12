@@ -1,7 +1,6 @@
 package com.paipianwang.pat.facade.information.service.biz;
 
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,6 @@ public class PmsNewsBiz {
 
 	@Autowired
 	private PmsNewsDao pmsNewsDao;
-
-	public List<PmsNews> RecommendNews() {
-		final List<PmsNews> list = pmsNewsDao.RecommendNews(); 
-		return list;
-	}
 
 	public DataGrid<PmsNews> listWithPagination(PageParam pageParam, Map<String, Object> paramMap) {
 		return pmsNewsDao.listWithPagination(pageParam, paramMap);
@@ -54,6 +48,16 @@ public class PmsNewsBiz {
 
 	public PmsNews findNewsById(long newsId) {
 		return pmsNewsDao.getById(newsId);
+	}
+
+	public PmsNews findNextNew(final String tags, final int newId, final Integer recommend) {
+		final PmsNews news = pmsNewsDao.findNextNew(tags, newId, recommend);
+		return news;
+	}
+
+	public PmsNews findPreNew(final String tags, final int newId, final Integer recommend) {
+		final PmsNews news = pmsNewsDao.findPreNew(tags, newId, recommend);
+		return news;
 	}
 
 }
