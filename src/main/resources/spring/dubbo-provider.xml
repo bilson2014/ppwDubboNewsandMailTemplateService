@@ -18,5 +18,4 @@
 	<!-- 消息服务接口 -->
 	<dubbo:service interface="com.paipianwang.pat.facade.information.service.PmsMailFacade" ref="pmsMailFacade"  />
 	<dubbo:service interface="com.paipianwang.pat.facade.information.service.PmsNewsFacade" ref="pmsNewsFacade"  />
-	<!-- <dubbo:service interface="com.paipianwang.pat.facade.information.service.PmsSolrFacade" ref="pmsSolrFacade"  /> -->
 </beans>
