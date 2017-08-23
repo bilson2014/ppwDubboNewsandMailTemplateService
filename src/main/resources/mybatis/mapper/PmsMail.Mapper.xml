@@ -8,16 +8,16 @@
 	<select id="getTemplateByType" resultType="PmsMail">
 		SELECT 
 			m.ID,m.SUBJECT,m.CONTENT,
-			m.MAIL_TYPE mailType,
-			m.CREATE_TIME createTime,
-			m.UPDATE_TIME updateTime,
-			m.RECEIVER receiver,
-			m.RECEIVER_ROLE receiverRole,
-			m.BCC bcc,
-			m.BCC_ROLE bccRole,
-			m.SENDER sender,
-			m.SENDER_ROLE senderRole,
-			m.MAIL_FILE mailFile
+				m.MAIL_TYPE mailType,
+				m.CREATE_TIME createTime,
+				m.UPDATE_TIME updateTime,
+				m.RECEIVER receiver,
+				m.RECEIVER_ROLE receiverRole,
+				m.BCC bcc,
+				m.BCC_ROLE bccRole,
+				m.SENDER sender,
+				m.SENDER_ROLE senderRole,
+				m.MAIL_FILE mailFile
 		FROM 
 		<include refid="pms_mail" />  m
 		<where>
