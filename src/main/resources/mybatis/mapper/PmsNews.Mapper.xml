@@ -16,7 +16,10 @@
 		TAGS AS tags,
 		PICLDURL AS picLDUrl,
 		RECOMMEND AS recommend,
-		VISIBLE AS visible
+		VISIBLE AS visible,
+		SEOTITLE AS seoTitle,
+		SEODESCRIPTION AS seoDescription,
+		SEOKEYWORDS AS seoKeywords
 	</sql>
 	
 	<!-- 新闻表 -->
@@ -53,7 +56,10 @@
 				TAGS,
 				PICLDURL,
 				RECOMMEND,
-				VISIBLE
+				VISIBLE,
+				SEOTITLE,
+				SEODESCRIPTION,
+				SEOKEYWORDS
 			)
 			VALUES
 			 (
@@ -64,8 +70,11 @@
 				${status},
 				#{tags},
 				#{picLDUrl},
-				${recommend},
-				${visible}
+				#{recommend},
+				${visible},
+				#{seoTitle},
+				#{seoDescription},
+				#{seoKeywords}
 			 )
 	</insert>
 	
@@ -79,8 +88,13 @@
 		      UPDATE_TIME = CURRENT_TIMESTAMP,
 		      STATUS = ${status},
 		      TAGS = #{tags},
+		      <if test="recommend != null and recommend != '' ">
 		      RECOMMEND = ${recommend},
-		      VISIBLE = ${visible}
+		      </if>
+		      VISIBLE = ${visible},
+			  SEOTITLE=#{seoTitle},
+			  SEODESCRIPTION=#{seoDescription},
+			  SEOKEYWORDS=#{seoKeywords}
 		      <if test="picLDUrl != null and picLDUrl != '' ">
 				,PICLDURL = #{picLDUrl}
 			</if> 
