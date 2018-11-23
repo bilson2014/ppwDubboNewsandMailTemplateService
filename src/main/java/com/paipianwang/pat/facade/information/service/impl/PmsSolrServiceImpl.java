@@ -22,7 +22,7 @@ import com.paipianwang.pat.common.entity.BaseEntity;
 import com.paipianwang.pat.facade.information.entity.PmsNewsSolr;
 import com.paipianwang.pat.facade.information.entity.PmsProductSolr;
 import com.paipianwang.pat.facade.information.service.PmsSolrFacade;
-
+@Deprecated
 @Service("pmsSolrFacade")
 public class PmsSolrServiceImpl implements PmsSolrFacade {
 
